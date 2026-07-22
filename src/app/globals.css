@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0c0e12;
+  --foreground: #f3f4f6;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Morphing Blob Keyframes for Organic Figma Feel */
+@keyframes blobMorph1 {
+  0% {
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    transform: translate(0px, 0px) scale(1) rotate(0deg);
+  }
+  33% {
+    border-radius: 70% 30% 50% 50% / 30% 60% 40% 70%;
+    transform: translate(40px, -60px) scale(1.15) rotate(120deg);
+  }
+  66% {
+    border-radius: 30% 70% 40% 60% / 60% 30% 70% 40%;
+    transform: translate(-30px, 30px) scale(0.9) rotate(240deg);
+  }
+  100% {
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    transform: translate(0px, 0px) scale(1) rotate(360deg);
+  }
+}
+
+@keyframes blobMorph2 {
+  0% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: translate(0px, 0px) scale(1) rotate(0deg);
+  }
+  50% {
+    border-radius: 30% 70% 60% 40% / 40% 70% 30% 60%;
+    transform: translate(-50px, 40px) scale(1.2) rotate(180deg);
+  }
+  100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: translate(0px, 0px) scale(1) rotate(360deg);
+  }
+}
+
+@keyframes blobMorph3 {
+  0% {
+    border-radius: 50% 50% 40% 60% / 40% 60% 50% 50%;
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    border-radius: 40% 60% 70% 30% / 60% 40% 30% 70%;
+    transform: translate(30px, -40px) scale(1.1);
+  }
+  100% {
+    border-radius: 50% 50% 40% 60% / 40% 60% 50% 50%;
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob-1 {
+  animation: blobMorph1 22s ease-in-out infinite alternate;
+}
+
+.animate-blob-2 {
+  animation: blobMorph2 28s ease-in-out infinite alternate;
+}
+
+.animate-blob-3 {
+  animation: blobMorph3 18s ease-in-out infinite alternate;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0c0e12;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
