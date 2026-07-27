@@ -1,25 +1,30 @@
 import AdminSidebar from "@/components/AdminSidebar";
+import AdminDashboardClient from "@/components/AdminDashboardClient";
+import { getHeroData, getCertificates } from "@/lib/queries";
+import { sql } from "@/lib/db";
 
-export default function AdminDashboardPage() {
+export default async function AdminDashboardPage() {
+  const hero = await getHeroData();
+  const certificates = await getCertificates();
+
+  // Load counts dynamically
+  const projectCountRes = await sql`SELECT COUNT(*)::integer as count FROM projects`;
+  const projectsCount = projectCountRes[0]?.count || 0;
+
+  const skillCountRes = await sql`SELECT COUNT(*)::integer as count FROM skill_items`;
+  const skillsCount = skillCountRes[0]?.count || 0;
+
+  const stats = {
+    projectsCount,
+    skillsCount
+  };
+
   return (
-    <div className="flex">
+    <div className="flex min-h-screen bg-gray-50">
       <AdminSidebar />
-      <main className="flex-1 p-8 bg-gray-50">
-        <h1 className="text-3xl font-bold mb-6">Dashboard Overview</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-            <h2 className="text-sm font-medium text-gray-500">Total Projects</h2>
-            <p className="text-3xl font-bold mt-2">12</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-            <h2 className="text-sm font-medium text-gray-500">Skills Listed</h2>
-            <p className="text-3xl font-bold mt-2">18</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-            <h2 className="text-sm font-medium text-gray-500">New Messages</h2>
-            <p className="text-3xl font-bold mt-2">5</p>
-          </div>
-        </div>
+      <main className="flex-1 p-8">
+        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-6">Dashboard Overview</h1>
+        <AdminDashboardClient hero={hero} certificates={certificates} stats={stats} />
       </main>
     </div>
   );
