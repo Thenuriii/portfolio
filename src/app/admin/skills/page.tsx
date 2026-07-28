@@ -1,20 +1,20 @@
 import AdminSidebar from "@/components/AdminSidebar";
+import AdminSkillsClient from "@/components/AdminSkillsClient";
+import { getAllSkills } from "@/lib/queries";
 
-export default function AdminSkillsPage() {
+export default async function AdminSkillsPage() {
+  const skills = await getAllSkills();
+
   return (
-    <div className="flex">
+    <div className="flex min-h-screen bg-gray-50">
       <AdminSidebar />
-      <main className="flex-1 p-8 bg-gray-50">
+      <main className="flex-1 p-8">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">Manage Skills</h1>
-          <button className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
-            + Add Skill
-          </button>
+          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Manage Skills</h1>
         </div>
-        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-          <p className="text-gray-600">List and update your technical skills here.</p>
-        </div>
+        <AdminSkillsClient initialCategories={skills} />
       </main>
     </div>
   );
 }
+
