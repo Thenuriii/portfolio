@@ -1,5 +1,7 @@
 import AdminSidebar from "@/components/AdminSidebar";
 import AdminDashboardClient from "@/components/AdminDashboardClient";
+import { requireSessionAuth } from "@/lib/authMiddleware";
+import { redirect } from "next/navigation";
 import {
   getHeroData,
   getCertificates,
@@ -15,6 +17,12 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
+  try {
+    await requireSessionAuth();
+  } catch (error) {
+    redirect("/admin/login");
+  }
+
   const [
     hero,
     certificates,

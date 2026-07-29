@@ -15,6 +15,7 @@ export default function AdminSidebar({ activeTab, setActiveTab }: AdminSidebarPr
 
   const handleLogout = async () => {
     try {
+      await fetch("/api/auth/session", { method: "DELETE" });
       await signOut(auth);
       router.push("/admin/login");
     } catch (err: any) {

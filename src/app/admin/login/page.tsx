@@ -34,7 +34,22 @@ export default function AdminLoginPage() {
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email.trim(), password.trim());
+      const result = await signInWithEmailAndPassword(auth, email.trim(), password.trim());
+      const idToken = await result.user.getIdToken();
+
+      const sessionRes = await fetch("/api/auth/session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ idToken }),
+      });
+
+      if (!sessionRes.ok) {
+        const data = await sessionRes.json();
+        throw new Error(data.error || "Failed to establish secure session");
+      }
+
       router.push("/admin/dashboard");
     } catch (err: any) {
       console.error("Login failure:", err);
