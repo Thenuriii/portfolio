@@ -29,5 +29,23 @@ if (typeof window !== "undefined") {
   });
 }
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-export const auth = getAuth(app);
+let app: any;
+try {
+  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+} catch (e) {
+  console.warn("Firebase App initialization error:", e);
+}
+
+let auth: any;
+if (typeof window === "undefined") {
+  auth = {} as any;
+} else {
+  try {
+    auth = app ? getAuth(app) : ({} as any);
+  } catch (e) {
+    console.error("Firebase Auth initialization error in browser:", e);
+    auth = {} as any;
+  }
+}
+
+export { auth };
