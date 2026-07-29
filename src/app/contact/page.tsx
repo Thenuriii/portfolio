@@ -36,7 +36,8 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!captchaToken) return;
+    const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+    if (siteKey && !captchaToken) return;
 
     setStatus("sending");
     setErrorMessage("");
@@ -182,13 +183,15 @@ export default function ContactPage() {
             />
           </div>
 
-          <div className="flex justify-center py-2">
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-              onChange={setCaptchaToken}
-            />
-          </div>
+          {process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && (
+            <div className="flex justify-center py-2">
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+                onChange={setCaptchaToken}
+              />
+            </div>
+          )}
 
           {status === "success" && (
             <p className="text-green-600 text-sm text-center font-medium">
@@ -203,7 +206,7 @@ export default function ContactPage() {
 
           <button
             type="submit"
-            disabled={!captchaToken || status === "sending"}
+            disabled={(!!process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY && !captchaToken) || status === "sending"}
             className="w-full py-2.5 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
           >
             {status === "sending" ? "Sending..." : "Send Message"}
