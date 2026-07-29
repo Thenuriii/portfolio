@@ -15,9 +15,15 @@ export async function GET(request: Request): Promise<Response> {
     }
 
     // Fetch the private blob stream using our read/write token
+    const token = process.env.BLOB_READ_WRITE_TOKEN;
+    if (!token) {
+      console.error("BLOB_READ_WRITE_TOKEN is missing in process.env");
+      return new Response("Vercel Blob store credentials (BLOB_READ_WRITE_TOKEN) are missing on the server. Please add them in your Vercel Project Environment Variables.", { status: 500 });
+    }
+
     const result = await get(blobUrl, {
       access: "private",
-      token: process.env.BLOB_READ_WRITE_TOKEN,
+      token,
     });
 
     if (!result) {
