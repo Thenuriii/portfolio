@@ -51,6 +51,7 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
       await deleteProject(id);
       setProjects(projects.filter((p) => p.id !== id));
       alert("Project deleted successfully.");
+      window.location.reload();
     } catch (err) {
       alert("Error deleting project: " + (err as Error).message);
     }
@@ -65,7 +66,10 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
       const formData = new FormData();
       formData.append("file", file);
       const res = await uploadFileAction(formData);
-      setEditingProject((prev) => prev ? { ...prev, image_url: res.url } : null);
+      if (res.error) {
+        throw new Error(res.error);
+      }
+      setEditingProject((prev) => prev ? { ...prev, image_url: res.url! } : null);
     } catch (err) {
       alert("Failed to upload image: " + (err as Error).message);
     } finally {
@@ -85,7 +89,10 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
         const formData = new FormData();
         formData.append("file", file);
         const res = await uploadFileAction(formData);
-        uploadedUrls.push(res.url);
+        if (res.error) {
+          throw new Error(res.error);
+        }
+        uploadedUrls.push(res.url!);
       }
       setEditingProject((prev) => 
         prev ? { ...prev, screenshots: [...(prev.screenshots || []), ...uploadedUrls] } : null
@@ -366,8 +373,8 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
             </button>
           </div>
 
-          <div className="border border-gray-200 rounded-lg overflow-hidden">
-            <table className="w-full text-left border-collapse text-sm">
+          <div className="border border-gray-200 rounded-lg overflow-x-auto">
+            <table className="w-full min-w-[600px] text-left border-collapse text-sm">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200 text-gray-700 font-semibold uppercase tracking-wider text-xs">
                   <th className="p-4">Thumbnail</th>

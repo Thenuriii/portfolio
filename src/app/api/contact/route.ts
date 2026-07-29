@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
+import { sql } from "@/lib/db";
 
 export async function POST(request: Request): Promise<NextResponse> {
   try {
-    const { name, email, message, captchaToken } = await request.json();
+    const { name, email, subject, message, captchaToken } = await request.json();
 
     // 1. Basic validation
     if (!name || !email || !message || !captchaToken) {
@@ -53,11 +54,17 @@ export async function POST(request: Request): Promise<NextResponse> {
       );
     }
 
-    // 5. Successful verification
-    // Note: EmailJS is not yet integrated in the project backend. Returning { ok: true } as per specification.
+    // 5. Save submission to database
+    const subjectVal = subject || "General Inquiry";
+    await sql`
+      INSERT INTO contact_messages (name, email, subject, message, created_at)
+      VALUES (${name}, ${email}, ${subjectVal}, ${message}, NOW())
+    `;
+
+    // 6. Successful verification and save
     return NextResponse.json({ ok: true });
   } catch (error: any) {
-    console.error("Error verifying reCAPTCHA:", error);
+    console.error("Error in contact form submission:", error);
     return NextResponse.json(
       { error: error.message || "Internal Server Error" },
       { status: 500 }

@@ -3,8 +3,10 @@ import Footer from "@/components/Footer";
 import { getAboutPageData } from "@/lib/queries";
 import { getPublicUrl } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 export default async function AboutPage() {
-  const { aboutStats, aboutFocus, education, certificates } = await getAboutPageData();
+  const { aboutStats, aboutFocus, education, certificates, coreTech } = await getAboutPageData();
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -19,21 +21,26 @@ export default async function AboutPage() {
             </p>
           ))
         ) : (
-          <p className="text-gray-700 leading-relaxed mb-6">
-            I am a software engineer dedicated to designing and developing web products that offer great user experiences and strong performance.
+          <p className="text-gray-500 italic leading-relaxed mb-6">
+            No bio details added yet. Please configure your About Focus items in the admin panel.
           </p>
         )}
 
         <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm mb-6">
           <h2 className="text-xl font-semibold mb-4 text-gray-850">Core Tech Stack</h2>
-          <ul className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm text-gray-650">
-            <li className="bg-gray-50 p-2 rounded text-center border border-gray-100">React / Next.js</li>
-            <li className="bg-gray-50 p-2 rounded text-center border border-gray-100">TypeScript</li>
-            <li className="bg-gray-50 p-2 rounded text-center border border-gray-100">Tailwind CSS</li>
-            <li className="bg-gray-50 p-2 rounded text-center border border-gray-100">Node.js</li>
-            <li className="bg-gray-50 p-2 rounded text-center border border-gray-100">PostgreSQL / Prisma</li>
-            <li className="bg-gray-50 p-2 rounded text-center border border-gray-100">REST & GraphQL</li>
-          </ul>
+          {coreTech && coreTech.length > 0 ? (
+            <ul className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm text-gray-650">
+              {coreTech.map((item) => (
+                <li key={item.id} className="bg-gray-50 p-2 rounded text-center border border-gray-100">
+                  {item.name}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-gray-500 italic text-center py-4 bg-gray-50 rounded border border-gray-100">
+              No core technologies added yet.
+            </p>
+          )}
         </div>
 
         {/* Education Section */}

@@ -132,6 +132,7 @@ export async function saveProject(project: {
 
   revalidatePath("/");
   revalidatePath("/projects");
+  revalidatePath("/admin/projects");
   return { success: true };
 }
 
@@ -155,6 +156,7 @@ export async function deleteProject(id: string) {
 
   revalidatePath("/");
   revalidatePath("/projects");
+  revalidatePath("/admin/projects");
   return { success: true };
 }
 
@@ -192,6 +194,7 @@ export async function saveHeroData(hero: {
   }
 
   revalidatePath("/");
+  revalidatePath("/admin/dashboard");
   return { success: true };
 }
 
@@ -224,6 +227,7 @@ export async function saveCertificate(cert: {
   }
 
   revalidatePath("/about");
+  revalidatePath("/admin/dashboard");
   return { success: true };
 }
 
@@ -237,6 +241,7 @@ export async function deleteCertificate(id: string) {
   await sql`DELETE FROM certificates WHERE id = ${id}`;
 
   revalidatePath("/about");
+  revalidatePath("/admin/dashboard");
   return { success: true };
 }
 
@@ -267,6 +272,7 @@ export async function saveSkillCategory(category: {
 
   revalidatePath("/");
   revalidatePath("/skills");
+  revalidatePath("/admin/skills");
   return { success: true };
 }
 
@@ -276,6 +282,7 @@ export async function deleteSkillCategory(id: string) {
 
   revalidatePath("/");
   revalidatePath("/skills");
+  revalidatePath("/admin/skills");
   return { success: true };
 }
 
@@ -299,6 +306,7 @@ export async function saveSkillItem(item: {
 
   revalidatePath("/");
   revalidatePath("/skills");
+  revalidatePath("/admin/skills");
   return { success: true };
 }
 
@@ -307,19 +315,184 @@ export async function deleteSkillItem(id: string) {
 
   revalidatePath("/");
   revalidatePath("/skills");
+  revalidatePath("/admin/skills");
+  return { success: true };
+}
+
+// Core Tech Stack Actions
+export async function saveCoreTechItem(item: {
+  id?: string;
+  name: string;
+  order: number;
+}) {
+  if (item.id) {
+    await sql`
+      UPDATE core_tech_stack
+      SET name = ${item.name},
+          "order" = ${item.order},
+          updated_at = NOW()
+      WHERE id = ${item.id}
+    `;
+  } else {
+    await sql`
+      INSERT INTO core_tech_stack (id, name, "order", created_at, updated_at)
+      VALUES (${crypto.randomUUID()}, ${item.name}, ${item.order}, NOW(), NOW())
+    `;
+  }
+
+  revalidatePath("/about");
+  revalidatePath("/admin/dashboard");
+  return { success: true };
+}
+
+export async function deleteCoreTechItem(id: string) {
+  await sql`DELETE FROM core_tech_stack WHERE id = ${id}`;
+
+  revalidatePath("/about");
+  revalidatePath("/admin/dashboard");
+  return { success: true };
+}
+
+export async function reorderCoreTechItems(items: { id: string; order: number }[]) {
+  for (const item of items) {
+    await sql`
+      UPDATE core_tech_stack
+      SET "order" = ${item.order},
+          updated_at = NOW()
+      WHERE id = ${item.id}
+    `;
+  }
+
+  revalidatePath("/about");
+  revalidatePath("/admin/dashboard");
   return { success: true };
 }
 
 export async function uploadFileAction(formData: FormData) {
-  const file = formData.get("file") as File;
-  if (!file) {
-    throw new Error("No file provided");
+  try {
+    const file = formData.get("file") as File;
+    if (!file) {
+      return { error: "No file provided" };
+    }
+
+    const token = process.env.BLOB_READ_WRITE_TOKEN;
+    if (!token) {
+      console.error("BLOB_READ_WRITE_TOKEN is missing on the server");
+      return { error: "Vercel Blob token is missing on the server configuration. Please check your environment variables." };
+    }
+
+    const blob = await put(file.name, file, {
+      access: "private",
+      token,
+    });
+
+    return { url: blob.url };
+  } catch (error: any) {
+    console.error("Error in uploadFileAction:", error);
+    return { error: error.message || "Failed to upload file to Vercel Blob" };
+  }
+}
+
+// Education Actions
+export async function saveEducation(edu: {
+  id?: string;
+  degree: string;
+  institution: string;
+  order: number;
+}) {
+  if (edu.id) {
+    await sql`
+      UPDATE education
+      SET degree = ${edu.degree},
+          institution = ${edu.institution},
+          "order" = ${edu.order}
+      WHERE id = ${edu.id}
+    `;
+  } else {
+    await sql`
+      INSERT INTO education (id, degree, institution, "order")
+      VALUES (${crypto.randomUUID()}, ${edu.degree}, ${edu.institution}, ${edu.order})
+    `;
   }
 
-  const blob = await put(file.name, file, {
-    access: "private",
-    token: process.env.BLOB_READ_WRITE_TOKEN,
-  });
-
-  return { url: blob.url };
+  revalidatePath("/");
+  revalidatePath("/about");
+  revalidatePath("/admin/dashboard");
+  return { success: true };
 }
+
+export async function deleteEducation(id: string) {
+  await sql`DELETE FROM education WHERE id = ${id}`;
+
+  revalidatePath("/");
+  revalidatePath("/about");
+  revalidatePath("/admin/dashboard");
+  return { success: true };
+}
+
+export async function reorderEducationItems(items: { id: string; order: number }[]) {
+  for (const item of items) {
+    await sql`
+      UPDATE education
+      SET "order" = ${item.order}
+      WHERE id = ${item.id}
+    `;
+  }
+
+  revalidatePath("/");
+  revalidatePath("/about");
+  revalidatePath("/admin/dashboard");
+  return { success: true };
+}
+
+// Core Curriculum Actions
+export async function saveCoreCurriculumItem(item: {
+  id?: string;
+  title: string;
+  description: string;
+  order: number;
+}) {
+  if (item.id) {
+    await sql`
+      UPDATE core_curriculum
+      SET title = ${item.title},
+          description = ${item.description},
+          "order" = ${item.order},
+          updated_at = NOW()
+      WHERE id = ${item.id}
+    `;
+  } else {
+    await sql`
+      INSERT INTO core_curriculum (id, title, description, "order", created_at, updated_at)
+      VALUES (${crypto.randomUUID()}, ${item.title}, ${item.description}, ${item.order}, NOW(), NOW())
+    `;
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin/dashboard");
+  return { success: true };
+}
+
+export async function deleteCoreCurriculumItem(id: string) {
+  await sql`DELETE FROM core_curriculum WHERE id = ${id}`;
+
+  revalidatePath("/");
+  revalidatePath("/admin/dashboard");
+  return { success: true };
+}
+
+export async function reorderCoreCurriculumItems(items: { id: string; order: number }[]) {
+  for (const item of items) {
+    await sql`
+      UPDATE core_curriculum
+      SET "order" = ${item.order},
+          updated_at = NOW()
+      WHERE id = ${item.id}
+    `;
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin/dashboard");
+  return { success: true };
+}
+

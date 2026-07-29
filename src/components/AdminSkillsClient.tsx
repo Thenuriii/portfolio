@@ -96,6 +96,7 @@ export default function AdminSkillsClient({ initialCategories }: AdminSkillsClie
       await deleteSkillCategory(id);
       setCategories(categories.filter((c) => c.id !== id));
       alert("Category deleted successfully.");
+      window.location.reload();
     } catch (err) {
       alert("Error deleting category: " + (err as Error).message);
     }

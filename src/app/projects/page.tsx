@@ -3,6 +3,8 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import { getAllProjects, slugify } from "@/lib/queries";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProjectsPage() {
   const projects = await getAllProjects();
 

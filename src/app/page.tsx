@@ -6,8 +6,10 @@ import Link from "next/link";
 import { getHomePageData, slugify } from "@/lib/queries";
 import { getPublicUrl } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
-  const { hero, aboutStats, aboutFocus, projects, skills, education } = await getHomePageData();
+  const { hero, aboutStats, aboutFocus, projects, skills, education, curriculum } = await getHomePageData();
 
   // Helper function to safely render category icons
   const renderIcon = (iconStr: string) => {
@@ -411,129 +413,9 @@ export default async function HomePage() {
                   </Link>
                 ))
               ) : (
-                <>
-                  <div className="bg-[#130f24]/70 border border-purple-500/20 rounded-2xl overflow-hidden group hover:border-purple-500/50 transition-all flex flex-col justify-between backdrop-blur-xl shadow-xl">
-                    <div className="h-44 bg-[#0d0918] border-b border-purple-500/20 p-4 flex flex-col justify-between relative overflow-hidden">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
-                          <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
-                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
-                        </div>
-                        <span className="text-[10px] font-mono text-purple-300/80 bg-purple-950/80 px-2 py-0.5 rounded border border-purple-500/20">
-                          UI Preview
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-3 gap-2 opacity-60 group-hover:opacity-90 transition-opacity my-auto">
-                        <div className="h-16 rounded bg-purple-950/60 border border-purple-500/30 p-2 flex flex-col justify-end">
-                          <div className="h-2 w-3/4 bg-purple-400/80 rounded mb-1"></div>
-                          <div className="h-1.5 w-1/2 bg-zinc-400/40 rounded"></div>
-                        </div>
-                        <div className="h-16 rounded bg-purple-950/60 border border-purple-500/30 p-2 flex flex-col justify-end">
-                          <div className="h-2 w-3/4 bg-purple-400/80 rounded mb-1"></div>
-                          <div className="h-1.5 w-1/2 bg-zinc-400/40 rounded"></div>
-                        </div>
-                        <div className="h-16 rounded bg-purple-950/60 border border-purple-500/30 p-2 flex flex-col justify-end">
-                          <div className="h-2 w-3/4 bg-purple-400/80 rounded mb-1"></div>
-                          <div className="h-1.5 w-1/2 bg-zinc-400/40 rounded"></div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-lg font-bold text-white group-hover:text-purple-300 transition-colors">
-                          Movie Matrix
-                        </h3>
-                        <span className="text-[11px] font-mono text-purple-400 block mt-0.5">
-                          C# + MVC + SQL Server
-                        </span>
-                        <p className="text-xs text-purple-200/70 leading-relaxed mt-2">
-                          All-in-one movie recommendation and review manager system built with clean tier architecture.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-[#130f24]/70 border border-purple-500/20 rounded-2xl overflow-hidden group hover:border-purple-500/50 transition-all flex flex-col justify-between backdrop-blur-xl shadow-xl">
-                    <div className="h-44 bg-[#0d0918] border-b border-purple-500/20 p-4 flex flex-col justify-between relative overflow-hidden">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
-                          <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
-                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
-                        </div>
-                        <span className="text-[10px] font-mono text-purple-300/80 bg-purple-950/80 px-2 py-0.5 rounded border border-purple-500/20">
-                          UI Preview
-                        </span>
-                      </div>
-
-                      <div className="space-y-2 opacity-60 group-hover:opacity-90 transition-opacity my-auto">
-                        <div className="h-3 bg-purple-950/60 rounded w-full flex items-center px-1">
-                          <div className="h-1.5 bg-purple-400/80 rounded w-2/3"></div>
-                        </div>
-                        <div className="h-3 bg-purple-950/60 rounded w-full flex items-center px-1">
-                          <div className="h-1.5 bg-indigo-400/80 rounded w-1/2"></div>
-                        </div>
-                        <div className="h-3 bg-purple-950/60 rounded w-full flex items-center px-1">
-                          <div className="h-1.5 bg-pink-400/80 rounded w-4/5"></div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-lg font-bold text-white group-hover:text-purple-300 transition-colors">
-                          MediStock
-                        </h3>
-                        <span className="text-[11px] font-mono text-purple-400 block mt-0.5">
-                          React + Node.js + PostgreSQL
-                        </span>
-                        <p className="text-xs text-purple-200/70 leading-relaxed mt-2">
-                          Medical inventory system designed for precision tracking and automated supply chain workflows.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-[#130f24]/70 border border-purple-500/20 rounded-2xl overflow-hidden group hover:border-purple-500/50 transition-all flex flex-col justify-between backdrop-blur-xl shadow-xl">
-                    <div className="h-44 bg-[#0d0918] border-b border-purple-500/20 p-4 flex flex-col justify-between relative overflow-hidden">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1.5">
-                          <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
-                          <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
-                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
-                        </div>
-                        <span className="text-[10px] font-mono text-purple-300/80 bg-purple-950/80 px-2 py-0.5 rounded border border-purple-500/20">
-                          Mobile App Wireframe
-                        </span>
-                      </div>
-
-                      <div className="w-24 h-24 mx-auto rounded-xl bg-purple-950/60 border border-purple-500/30 p-2 flex flex-col justify-between opacity-60 group-hover:opacity-90 transition-opacity">
-                        <div className="h-2 w-12 bg-purple-400/80 rounded mx-auto"></div>
-                        <div className="space-y-1">
-                          <div className="h-1.5 bg-zinc-500/50 rounded w-full"></div>
-                          <div className="h-1.5 bg-purple-400/80 rounded w-3/4"></div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-lg font-bold text-white group-hover:text-purple-300 transition-colors">
-                          Skillmatch
-                        </h3>
-                        <span className="text-[11px] font-mono text-purple-400 block mt-0.5">
-                          Flutter + Firebase + Dart
-                        </span>
-                        <p className="text-xs text-purple-200/70 leading-relaxed mt-2">
-                          Co-workers talent matching platform featuring real-time talent search, chat, and automated skill verification.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </>
+                <div className="col-span-full py-12 text-center bg-[#130f24]/40 border border-purple-500/20 rounded-2xl backdrop-blur-xl shadow-xl">
+                  <p className="text-sm text-purple-300/85 italic">No projects listed yet. Check back soon!</p>
+                </div>
               )}
             </div>
           </section>
@@ -571,19 +453,8 @@ export default async function HomePage() {
                   </div>
                 ))
               ) : (
-                <div className="md:col-span-5 space-y-4">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-xs font-mono text-purple-300">
-                    <span>2022 — Present</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-white leading-tight">
-                    BSc in Management Information Systems (Special)
-                  </h3>
-                  <p className="text-xs font-semibold text-purple-300/80">
-                    NSBM Green University (Sri Lanka)
-                  </p>
-                  <p className="text-xs text-purple-200/70 leading-relaxed">
-                    Building a comprehensive technical foundation combining software development, database engineering, and user-centric system architecture.
-                  </p>
+                <div className="md:col-span-5 py-8 text-center bg-[#130f24]/40 border border-purple-500/20 rounded-2xl backdrop-blur-xl">
+                  <p className="text-xs text-purple-300/85 italic">No education entries added yet. Configure education in the admin panel.</p>
                 </div>
               )}
 
@@ -592,22 +463,18 @@ export default async function HomePage() {
                   Core Curriculum
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="bg-[#0d0918]/80 p-4 rounded-xl border border-purple-500/20">
-                    <h5 className="text-xs font-bold text-purple-300">Database Design</h5>
-                    <p className="text-[11px] text-purple-200/60 mt-1">Relational modeling &amp; SQL optimization</p>
-                  </div>
-                  <div className="bg-[#0d0918]/80 p-4 rounded-xl border border-purple-500/20">
-                    <h5 className="text-xs font-bold text-purple-300">OOP</h5>
-                    <p className="text-[11px] text-purple-200/60 mt-1">Design patterns &amp; Clean architecture</p>
-                  </div>
-                  <div className="bg-[#0d0918]/80 p-4 rounded-xl border border-purple-500/20">
-                    <h5 className="text-xs font-bold text-purple-300">SQA</h5>
-                    <p className="text-[11px] text-purple-200/60 mt-1">Testing, CI/CD &amp; Code quality</p>
-                  </div>
-                  <div className="bg-[#0d0918]/80 p-4 rounded-xl border border-purple-500/20">
-                    <h5 className="text-xs font-bold text-purple-300">Data Structures</h5>
-                    <p className="text-[11px] text-purple-200/60 mt-1">Algorithm complexity &amp; efficiency</p>
-                  </div>
+                  {curriculum && curriculum.length > 0 ? (
+                    curriculum.map((item) => (
+                      <div key={item.id} className="bg-[#0d0918]/80 p-4 rounded-xl border border-purple-500/20">
+                        <h5 className="text-xs font-bold text-purple-300">{item.title}</h5>
+                        <p className="text-[11px] text-purple-200/60 mt-1">{item.description}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="col-span-full py-6 text-center text-xs text-purple-300/80 italic">
+                      No curriculum topics listed yet.
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

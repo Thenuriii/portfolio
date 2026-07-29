@@ -90,6 +90,25 @@ export interface SkillCategory {
   items: SkillItem[];
 }
 
+export interface CoreTechItem {
+  id: string;
+  name: string;
+  order: number;
+  created_at?: Date;
+  updated_at?: Date;
+}
+
+export interface CoreCurriculumItem {
+  id: string;
+  title: string;
+  description: string;
+  order: number;
+  created_at?: Date;
+  updated_at?: Date;
+}
+
+
+
 // Slugification helper
 export function slugify(text: string): string {
   return text
@@ -195,26 +214,48 @@ export async function getAllSkills(): Promise<SkillCategory[]> {
   }
 }
 
+export async function getCoreCurriculum(): Promise<CoreCurriculumItem[]> {
+  try {
+    const rows = await sql`SELECT * FROM core_curriculum ORDER BY "order" ASC, id ASC`;
+    return rows as unknown as CoreCurriculumItem[];
+  } catch (error) {
+    console.error("Error in getCoreCurriculum:", error);
+    return [];
+  }
+}
+
 export async function getHomePageData() {
-  const [hero, aboutStats, aboutFocus, projects, skills, education] = await Promise.all([
+  const [hero, aboutStats, aboutFocus, projects, skills, education, curriculum] = await Promise.all([
     getHeroData(),
     getAboutStats(),
     getAboutFocus(),
     getAllProjects(),
     getAllSkills(),
     getEducation(),
+    getCoreCurriculum(),
   ]);
-  return { hero, aboutStats, aboutFocus, projects, skills, education };
+  return { hero, aboutStats, aboutFocus, projects, skills, education, curriculum };
+}
+
+export async function getCoreTechStack(): Promise<CoreTechItem[]> {
+  try {
+    const rows = await sql`SELECT * FROM core_tech_stack ORDER BY "order" ASC, id ASC`;
+    return rows as unknown as CoreTechItem[];
+  } catch (error) {
+    console.error("Error in getCoreTechStack:", error);
+    return [];
+  }
 }
 
 export async function getAboutPageData() {
-  const [aboutStats, aboutFocus, education, certificates] = await Promise.all([
+  const [aboutStats, aboutFocus, education, certificates, coreTech] = await Promise.all([
     getAboutStats(),
     getAboutFocus(),
     getEducation(),
     getCertificates(),
+    getCoreTechStack(),
   ]);
-  return { aboutStats, aboutFocus, education, certificates };
+  return { aboutStats, aboutFocus, education, certificates, coreTech };
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {

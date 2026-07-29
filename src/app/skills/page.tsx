@@ -2,6 +2,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getAllSkills } from "@/lib/queries";
 
+export const dynamic = "force-dynamic";
+
 export default async function SkillsPage() {
   const skills = await getAllSkills();
 

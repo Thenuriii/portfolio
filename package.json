@@ -18,6 +18,7 @@
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",
     "@vercel/blob": "^2.6.1",
+    "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
     "firebase": "^12.16.0",
     "firebase-admin": "^14.2.0",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

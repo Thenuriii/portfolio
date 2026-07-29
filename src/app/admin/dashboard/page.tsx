@@ -1,31 +1,61 @@
 import AdminSidebar from "@/components/AdminSidebar";
 import AdminDashboardClient from "@/components/AdminDashboardClient";
-import { getHeroData, getCertificates } from "@/lib/queries";
-import { sql } from "@/lib/db";
+import {
+  getHeroData,
+  getCertificates,
+  getCoreTechStack,
+  getEducation,
+  getCoreCurriculum,
+  getAboutStats,
+  getAboutFocus,
+  getAllProjects,
+  getAllSkills
+} from "@/lib/queries";
+
+export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
-  const hero = await getHeroData();
-  const certificates = await getCertificates();
-
-  // Load counts dynamically
-  const projectCountRes = await sql`SELECT COUNT(*)::integer as count FROM projects`;
-  const projectsCount = projectCountRes[0]?.count || 0;
-
-  const skillCountRes = await sql`SELECT COUNT(*)::integer as count FROM skill_items`;
-  const skillsCount = skillCountRes[0]?.count || 0;
+  const [
+    hero,
+    certificates,
+    coreTech,
+    education,
+    curriculum,
+    aboutStats,
+    aboutFocus,
+    projects,
+    skills
+  ] = await Promise.all([
+    getHeroData(),
+    getCertificates(),
+    getCoreTechStack(),
+    getEducation(),
+    getCoreCurriculum(),
+    getAboutStats(),
+    getAboutFocus(),
+    getAllProjects(),
+    getAllSkills()
+  ]);
 
   const stats = {
-    projectsCount,
-    skillsCount
+    projectsCount: projects.length,
+    skillsCount: skills.reduce((acc, cat) => acc + (cat.items?.length || 0), 0)
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <AdminSidebar />
-      <main className="flex-1 p-8">
-        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-6">Dashboard Overview</h1>
-        <AdminDashboardClient hero={hero} certificates={certificates} stats={stats} />
-      </main>
+    <div className="flex flex-col lg:flex-row min-h-screen bg-[#0b0813] text-gray-100 selection:bg-purple-500 selection:text-white">
+      <AdminDashboardClient
+        hero={hero}
+        certificates={certificates}
+        stats={stats}
+        coreTech={coreTech}
+        education={education}
+        curriculum={curriculum}
+        aboutStats={aboutStats}
+        aboutFocus={aboutFocus}
+        projects={projects}
+        skills={skills}
+      />
     </div>
   );
 }
