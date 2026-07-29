@@ -1,7 +1,7 @@
 "use server";
 
 import { sql } from "@/lib/db";
-import { del } from "@vercel/blob";
+import { put, del } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 
 // Helper function to safely delete a blob url if it's a Vercel Blob storage link
@@ -308,4 +308,18 @@ export async function deleteSkillItem(id: string) {
   revalidatePath("/");
   revalidatePath("/skills");
   return { success: true };
+}
+
+export async function uploadFileAction(formData: FormData) {
+  const file = formData.get("file") as File;
+  if (!file) {
+    throw new Error("No file provided");
+  }
+
+  const blob = await put(file.name, file, {
+    access: "private",
+    token: process.env.BLOB_READ_WRITE_TOKEN,
+  });
+
+  return { url: blob.url };
 }

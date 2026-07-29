@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { saveHeroData, saveCertificate, deleteCertificate } from "@/app/admin/actions";
+import { saveHeroData, saveCertificate, deleteCertificate, uploadFileAction } from "@/app/admin/actions";
 import { type HeroData, type Certificate } from "@/lib/queries";
-import { upload } from "@vercel/blob/client";
+import { getPublicUrl } from "@/lib/utils";
 
 interface AdminDashboardClientProps {
   hero: HeroData | null;
@@ -53,11 +53,10 @@ export default function AdminDashboardClient({ hero, certificates, stats }: Admi
 
     setProfileUploading(true);
     try {
-      const newBlob = await upload(file.name, file, {
-        access: "public",
-        handleUploadUrl: "/api/studio/upload"
-      });
-      setProfileImageUrl(newBlob.url);
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await uploadFileAction(formData);
+      setProfileImageUrl(res.url);
     } catch (err) {
       alert("Failed to upload profile picture: " + (err as Error).message);
     } finally {
@@ -71,11 +70,10 @@ export default function AdminDashboardClient({ hero, certificates, stats }: Admi
 
     setCvUploading(true);
     try {
-      const newBlob = await upload(file.name, file, {
-        access: "public",
-        handleUploadUrl: "/api/studio/upload"
-      });
-      setCvUrl(newBlob.url);
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await uploadFileAction(formData);
+      setCvUrl(res.url);
     } catch (err) {
       alert("Failed to upload CV document: " + (err as Error).message);
     } finally {
@@ -116,11 +114,10 @@ export default function AdminDashboardClient({ hero, certificates, stats }: Admi
 
     setCertImageUploading(true);
     try {
-      const newBlob = await upload(file.name, file, {
-        access: "public",
-        handleUploadUrl: "/api/studio/upload"
-      });
-      setEditingCert((prev) => prev ? { ...prev, image_url: newBlob.url } : null);
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await uploadFileAction(formData);
+      setEditingCert((prev) => prev ? { ...prev, image_url: res.url } : null);
     } catch (err) {
       alert("Failed to upload certificate image: " + (err as Error).message);
     } finally {
@@ -202,7 +199,7 @@ export default function AdminDashboardClient({ hero, certificates, stats }: Admi
               </div>
               {profileImageUrl && (
                 <div className="relative w-20 h-20 rounded-full border border-gray-200 overflow-hidden shadow-inner mt-2">
-                  <img src={profileImageUrl} alt="Profile Preview" className="w-full h-full object-cover" />
+                  <img src={getPublicUrl(profileImageUrl)} alt="Profile Preview" className="w-full h-full object-cover" />
                 </div>
               )}
             </div>
@@ -225,7 +222,7 @@ export default function AdminDashboardClient({ hero, certificates, stats }: Admi
                   <svg className="w-4 h-4 text-purple-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
-                  <a href={cvUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-purple-650 hover:underline font-medium truncate">
+                  <a href={getPublicUrl(cvUrl)} target="_blank" rel="noopener noreferrer" className="text-xs text-purple-650 hover:underline font-medium truncate">
                     View Uploaded CV Document
                   </a>
                 </div>
@@ -288,7 +285,7 @@ export default function AdminDashboardClient({ hero, certificates, stats }: Admi
                 </div>
                 {editingCert.image_url && (
                   <div className="relative w-16 h-16 border border-gray-200 rounded overflow-hidden shadow-sm mt-2">
-                    <img src={editingCert.image_url} alt="Badge Preview" className="w-full h-full object-cover" />
+                    <img src={getPublicUrl(editingCert.image_url)} alt="Badge Preview" className="w-full h-full object-cover" />
                   </div>
                 )}
               </div>
@@ -339,7 +336,7 @@ export default function AdminDashboardClient({ hero, certificates, stats }: Admi
                           <td className="p-3">
                             {cert.image_url ? (
                               <div className="w-10 h-10 border border-gray-200 rounded overflow-hidden">
-                                <img src={cert.image_url} alt={cert.title} className="w-full h-full object-cover" />
+                                <img src={getPublicUrl(cert.image_url)} alt={cert.title} className="w-full h-full object-cover" />
                               </div>
                             ) : (
                               <span className="text-xs text-gray-400 italic">No image</span>

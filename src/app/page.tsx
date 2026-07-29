@@ -4,6 +4,7 @@ import BackgroundAnimation from "@/components/BackgroundAnimation";
 import ContactForm from "@/components/ContactForm";
 import Link from "next/link";
 import { getHomePageData, slugify } from "@/lib/queries";
+import { getPublicUrl } from "@/lib/utils";
 
 export default async function HomePage() {
   const { hero, aboutStats, aboutFocus, projects, skills, education } = await getHomePageData();
@@ -72,7 +73,7 @@ export default async function HomePage() {
                   </a>
 
                   <a
-                    href={hero?.cv_url || "#contact"}
+                    href={getPublicUrl(hero?.cv_url) || "#contact"}
                     target={hero?.cv_url ? "_blank" : undefined}
                     rel={hero?.cv_url ? "noopener noreferrer" : undefined}
                     className="px-6 py-3.5 bg-[#130f24]/80 hover:bg-[#1a1433] text-purple-200 border border-purple-500/30 hover:border-purple-400/60 font-medium text-xs sm:text-sm rounded-xl transition-all backdrop-blur-md flex items-center gap-2"
@@ -93,7 +94,7 @@ export default async function HomePage() {
                   <div className="w-full h-full rounded-full bg-gradient-to-b from-[#130f24]/90 to-[#0d0918]/95 border border-purple-500/40 relative overflow-hidden shadow-2xl backdrop-blur-xl group">
                     {hero?.profile_image_url ? (
                       <img
-                        src={hero.profile_image_url}
+                        src={getPublicUrl(hero.profile_image_url)}
                         alt="Nimsara"
                         className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500"
                       />
@@ -354,7 +355,7 @@ export default async function HomePage() {
                     {project.image_url ? (
                       <div className="h-44 bg-[#0d0918] border-b border-purple-500/20 relative overflow-hidden flex items-center justify-center">
                         <img
-                          src={project.image_url}
+                          src={getPublicUrl(project.image_url)}
                           alt={project.title}
                           className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500"
                         />

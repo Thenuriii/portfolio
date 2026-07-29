@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getProjectBySlug } from "@/lib/queries";
 import { notFound } from "next/navigation";
+import { getPublicUrl } from "@/lib/utils";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -106,7 +107,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                   className="bg-white p-2 rounded-2xl border border-gray-200 shadow-sm overflow-hidden group"
                 >
                   <img
-                    src={url}
+                    src={getPublicUrl(url)}
                     alt={`${project.title} screenshot ${idx + 1}`}
                     className="w-full h-auto object-cover rounded-xl group-hover:scale-[1.01] transition-transform duration-300"
                   />

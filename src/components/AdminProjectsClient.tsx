@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { saveProject, deleteProject } from "@/app/admin/actions";
+import { saveProject, deleteProject, uploadFileAction } from "@/app/admin/actions";
 import { type Project } from "@/lib/queries";
-import { upload } from "@vercel/blob/client";
+import { getPublicUrl } from "@/lib/utils";
 
 interface AdminProjectsClientProps {
   initialProjects: Project[];
@@ -62,11 +62,10 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
 
     setMainImageUploading(true);
     try {
-      const newBlob = await upload(file.name, file, {
-        access: "public",
-        handleUploadUrl: "/api/studio/upload",
-      });
-      setEditingProject((prev) => prev ? { ...prev, image_url: newBlob.url } : null);
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await uploadFileAction(formData);
+      setEditingProject((prev) => prev ? { ...prev, image_url: res.url } : null);
     } catch (err) {
       alert("Failed to upload image: " + (err as Error).message);
     } finally {
@@ -83,11 +82,10 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
       const uploadedUrls: string[] = [];
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const newBlob = await upload(file.name, file, {
-          access: "public",
-          handleUploadUrl: "/api/studio/upload",
-        });
-        uploadedUrls.push(newBlob.url);
+        const formData = new FormData();
+        formData.append("file", file);
+        const res = await uploadFileAction(formData);
+        uploadedUrls.push(res.url);
       }
       setEditingProject((prev) => 
         prev ? { ...prev, screenshots: [...(prev.screenshots || []), ...uploadedUrls] } : null
@@ -300,7 +298,7 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
             </div>
             {editingProject.image_url && (
               <div className="mt-2 relative w-40 h-24 border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-                <img src={editingProject.image_url} alt="Main Preview" className="w-full h-full object-cover" />
+                <img src={getPublicUrl(editingProject.image_url)} alt="Main Preview" className="w-full h-full object-cover" />
               </div>
             )}
           </div>
@@ -323,7 +321,7 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-2">
                 {editingProject.screenshots.map((url, idx) => (
                   <div key={idx} className="relative w-full h-24 border border-gray-200 rounded-xl overflow-hidden shadow-sm group">
-                    <img src={url} alt={`Screenshot ${idx}`} className="w-full h-full object-cover" />
+                    <img src={getPublicUrl(url)} alt={`Screenshot ${idx}`} className="w-full h-full object-cover" />
                     <button
                       type="button"
                       onClick={() => removeScreenshot(idx)}
@@ -385,7 +383,7 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
                       <td className="p-4">
                         {project.image_url ? (
                           <div className="w-16 h-10 border border-gray-250 rounded-lg overflow-hidden shadow-inner bg-gray-100">
-                            <img src={project.image_url} alt={project.title} className="w-full h-full object-cover" />
+                            <img src={getPublicUrl(project.image_url)} alt={project.title} className="w-full h-full object-cover" />
                           </div>
                         ) : (
                           <span className="text-xs text-gray-400 italic">No image</span>
