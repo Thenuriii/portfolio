@@ -5,7 +5,11 @@ export async function POST(request: Request): Promise<NextResponse> {
   try {
     const { name, email, subject, message, captchaToken } = await request.json();
 
-    const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+    let secretKey = process.env.RECAPTCHA_SECRET_KEY || "";
+    if (secretKey.startsWith('"') && secretKey.endsWith('"')) {
+      secretKey = secretKey.slice(1, -1);
+    }
+    secretKey = secretKey.trim();
 
     // 1. Basic validation
     if (!name || !email || !message || (secretKey && !captchaToken)) {
