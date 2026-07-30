@@ -30,22 +30,23 @@ if (typeof window !== "undefined") {
 }
 
 let app: any;
-try {
-  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-} catch (e) {
-  console.warn("Firebase App initialization error:", e);
-}
-
 let auth: any;
-if (typeof window === "undefined") {
-  auth = {} as any;
-} else {
+
+const hasApiKey = !!(firebaseConfig.apiKey && firebaseConfig.apiKey.trim() !== "" && firebaseConfig.apiKey !== "placeholder");
+
+if (hasApiKey) {
   try {
-    auth = app ? getAuth(app) : ({} as any);
+    app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+    auth = getAuth(app);
   } catch (e) {
-    console.error("Firebase Auth initialization error in browser:", e);
+    console.warn("Firebase initialization error:", e);
     auth = {} as any;
   }
+} else {
+  if (typeof window !== "undefined") {
+    console.warn("Firebase API key is missing or empty. Bypassing client-side initialization.");
+  }
+  auth = {} as any;
 }
 
 export { auth };

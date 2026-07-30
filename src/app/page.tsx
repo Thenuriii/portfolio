@@ -35,13 +35,19 @@ export default async function HomePage() {
           <section id="home" className="relative pt-6 pb-12 min-h-[85vh] flex items-center">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
               <div className="lg:col-span-7 space-y-6">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.12]">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-xs font-semibold text-purple-300 tracking-wide w-fit">
+                  <span className="animate-bounce">👋</span>
+                  <span>Hi, I'm Thenuri</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400/80"></span>
+                </div>
+
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.08] drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
                   {hero?.job_status ? (
                     <>
                       {hero.job_status.includes("&") ? (
                         <>
                           {hero.job_status.split("&")[0].trim()} <br />
-                          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-400 to-indigo-300">
+                          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-400 to-indigo-300 drop-shadow-[0_2px_8px_rgba(168,85,247,0.35)]">
                             &amp; {hero.job_status.split("&")[1].trim()}
                           </span>
                         </>
@@ -52,7 +58,7 @@ export default async function HomePage() {
                   ) : (
                     <>
                       MIS Undergraduate <br />
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-400 to-indigo-300">
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-purple-400 to-indigo-300 drop-shadow-[0_2px_8px_rgba(168,85,247,0.35)]">
                         &amp; UI/UX Enthusiast
                       </span>
                     </>
@@ -62,6 +68,17 @@ export default async function HomePage() {
                 <p className="text-purple-200/80 text-sm sm:text-base leading-relaxed max-w-xl font-normal">
                   Focusing on crafting intuitive user experiences, modern UI designs, and robust web technologies backed by efficient database management systems.
                 </p>
+
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {["UI/UX Design", "Figma", "MySQL", "Java / Python"].map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-3.5 py-1 rounded-full text-[11px] font-semibold text-purple-200 bg-purple-950/20 border border-purple-500/25 shadow-[0_0_12px_rgba(168,85,247,0.1)] hover:shadow-[0_0_16px_rgba(168,85,247,0.2)] hover:border-purple-400/40 transition-all"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
 
                 <div className="pt-2 flex flex-wrap gap-4 items-center">
                   <a
@@ -142,6 +159,11 @@ export default async function HomePage() {
                       <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
                     </svg>
                     <span>Figma</span>
+                  </div>
+
+                  <div className="absolute bottom-6 right-2 px-3 py-1.5 rounded-full bg-[#130f24]/95 border border-purple-500/40 shadow-xl backdrop-blur-md flex items-center gap-1.5 text-[10px] font-bold text-white uppercase tracking-wider z-20">
+                    <span className="w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse"></span>
+                    <span>Available</span>
                   </div>
                 </div>
               </div>

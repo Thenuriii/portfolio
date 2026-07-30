@@ -27,10 +27,10 @@ export default function Navbar() {
       }`}
     >
       <div
-        className={`max-w-6xl mx-auto px-5 sm:px-6 py-3 rounded-2xl transition-all duration-500 flex justify-between items-center ${
+        className={`max-w-5xl mx-auto px-6 py-3 rounded-full transition-all duration-500 flex justify-between items-center ${
           scrolled
-            ? "bg-[#130f24]/75 backdrop-blur-xl border border-purple-500/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] shadow-purple-500/10"
-            : "bg-[#130f24]/40 backdrop-blur-md border border-purple-500/15 shadow-xl"
+            ? "bg-[#130f24]/80 backdrop-blur-xl border border-purple-500/25 shadow-[0_8px_32px_0_rgba(0,0,0,0.6)] shadow-purple-500/15"
+            : "bg-[#130f24]/50 backdrop-blur-md border border-purple-500/10 shadow-xl"
         }`}
       >
         <Link
@@ -45,7 +45,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center space-x-7 text-xs font-medium tracking-wide text-zinc-300">
+        <nav className="hidden md:flex items-center space-x-8 text-xs font-semibold tracking-wide text-zinc-300">
           <Link
             href="#home"
             className="hover:text-purple-300 transition-colors py-1 relative group"
